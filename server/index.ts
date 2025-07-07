@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
@@ -6,6 +7,7 @@ import { WebSocketServer } from 'ws';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { registerRoutes } from './routes';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,10 +45,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Register all routes
+const httpServer = registerRoutes(app);
+
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
   });
@@ -54,18 +59,18 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 3000;
 
-server.listen(port, '0.0.0.0', () => {
+httpServer.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${port}`);
 });
 
 // WebSocket handling
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  
+
   ws.on('message', (message) => {
     console.log('Received:', message.toString());
   });
-  
+
   ws.on('close', () => {
     console.log('Client disconnected');
   });

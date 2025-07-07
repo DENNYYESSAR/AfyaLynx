@@ -17,7 +17,7 @@ import {
   type InsertHealthInquiry,
   type ClinicReview,
   type InsertClinicReview
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, like, and, desc, sql } from "drizzle-orm";
 import session from "express-session";
@@ -32,7 +32,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Clinic methods
   getClinics(filters?: {
     city?: string;
@@ -42,16 +42,16 @@ export interface IStorage {
   getClinic(id: number): Promise<Clinic | undefined>;
   createClinic(clinic: InsertClinic & { userId: number }): Promise<Clinic>;
   updateClinicAvailability(id: number, isOpen: boolean, waitTime?: number): Promise<void>;
-  
+
   // Blog methods
   getBlogPosts(published?: boolean): Promise<BlogPost[]>;
   getBlogPost(slug: string): Promise<BlogPost | undefined>;
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
-  
+
   // Testimonial methods
   getTestimonials(featured?: boolean): Promise<Testimonial[]>;
   createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
-  
+
   // Health inquiry methods
   createHealthInquiry(inquiry: InsertHealthInquiry & { userId: number }): Promise<HealthInquiry>;
   getUserHealthInquiries(userId: number): Promise<HealthInquiry[]>;
@@ -60,11 +60,11 @@ export interface IStorage {
     aiRecommendation: string, 
     mealRecommendations: any
   ): Promise<void>;
-  
+
   // Review methods
   getClinicReviews(clinicId: number): Promise<(ClinicReview & { user: Pick<User, 'username'> })[]>;
   createClinicReview(review: InsertClinicReview & { userId: number }): Promise<ClinicReview>;
-  
+
   sessionStore: session.Store;
 }
 
@@ -109,7 +109,7 @@ export class DatabaseStorage implements IStorage {
     isOpen?: boolean;
   }): Promise<Clinic[]> {
     let query = db.select().from(clinics) as any;
-    
+
     if (filters) {
       const conditions = [];
       if (filters.city) {
@@ -121,12 +121,12 @@ export class DatabaseStorage implements IStorage {
       if (filters.isOpen !== undefined) {
         conditions.push(eq(clinics.isOpen, filters.isOpen));
       }
-      
+
       if (conditions.length > 0) {
         query = query.where(and(...conditions));
       }
     }
-    
+
     return await query.orderBy(desc(clinics.rating));
   }
 
@@ -148,7 +148,7 @@ export class DatabaseStorage implements IStorage {
     if (waitTime !== undefined) {
       updateData.waitTime = waitTime;
     }
-    
+
     await db
       .update(clinics)
       .set(updateData)
@@ -158,11 +158,11 @@ export class DatabaseStorage implements IStorage {
   // Blog methods
   async getBlogPosts(published?: boolean): Promise<BlogPost[]> {
     let query = db.select().from(blogPosts) as any;
-    
+
     if (published !== undefined) {
       query = query.where(eq(blogPosts.published, published));
     }
-    
+
     return await query.orderBy(desc(blogPosts.createdAt));
   }
 
@@ -177,7 +177,7 @@ export class DatabaseStorage implements IStorage {
       .toLowerCase()
       .replace(/[^a-z0-9 ]/g, '')
       .replace(/\s+/g, '-');
-    
+
     const [newPost] = await db
       .insert(blogPosts)
       .values({ ...post, slug })
@@ -188,11 +188,11 @@ export class DatabaseStorage implements IStorage {
   // Testimonial methods
   async getTestimonials(featured?: boolean): Promise<Testimonial[]> {
     let query = db.select().from(testimonials) as any;
-    
+
     if (featured !== undefined) {
       query = query.where(eq(testimonials.featured, featured));
     }
-    
+
     return await query.orderBy(desc(testimonials.createdAt));
   }
 

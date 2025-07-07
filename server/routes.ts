@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { insertClinicSchema, insertHealthInquirySchema, insertClinicReviewSchema } from "@shared/schema";
+import { insertClinicSchema, insertHealthInquirySchema, insertClinicReviewSchema } from "../shared/schema";
 
 export function registerRoutes(app: Express): Server {
   // Setup authentication routes
@@ -139,7 +139,7 @@ export function registerRoutes(app: Express): Server {
   // AI Prediction endpoint for meal recommendations
   app.post("/api/predict", async (req, res) => {
     try {
-      const { symptoms, additionalInfo, inquiryId } = req.body;
+      const { symptoms, inquiryId } = req.body;
 
       if (!symptoms) {
         return res.status(400).json({ error: "Symptoms are required" });
