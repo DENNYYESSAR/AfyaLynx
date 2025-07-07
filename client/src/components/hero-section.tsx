@@ -22,11 +22,18 @@ export default function HeroSection() {
                   Start Health Assessment
                 </Button>
               </Link>
-              <Link href="#features">
-                <Button variant="outline" className="afya-btn-secondary text-lg px-8 py-4">
-                  Explore Features
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="afya-btn-secondary text-lg px-8 py-4"
+                onClick={() => {
+                  const featuresSection = document.getElementById('features');
+                  if (featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                Explore Features
+              </Button>
             </div>
             
             {/* Social Proof */}

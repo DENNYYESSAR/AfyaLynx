@@ -20,7 +20,7 @@ export default function CTASection() {
             </Button>
           </Link>
           <Link href="/contact">
-            <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+            <Button variant="outline" className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-primary px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 shadow-lg">
               <Phone className="mr-2 h-5 w-5" />
               Contact Sales
             </Button>

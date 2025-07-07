@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,7 +22,8 @@ import {
   Plus,
   Minus,
   Target,
-  Navigation as NavigationIcon
+  Navigation as NavigationIcon,
+  ArrowLeft
 } from "lucide-react";
 
 export default function ClinicFinder() {
@@ -34,7 +36,7 @@ export default function ClinicFinder() {
     queryFn: async () => {
       const params = new URLSearchParams();
       if (searchCity) params.append("city", searchCity);
-      if (selectedSpecialty) params.append("specialty", selectedSpecialty);
+      if (selectedSpecialty && selectedSpecialty !== "all") params.append("specialty", selectedSpecialty);
       if (isOpenFilter !== undefined) params.append("isOpen", isOpenFilter.toString());
       
       const response = await fetch(`/api/clinics?${params.toString()}`, {
@@ -66,7 +68,7 @@ export default function ClinicFinder() {
 
   const clearFilters = () => {
     setSearchCity("");
-    setSelectedSpecialty("");
+    setSelectedSpecialty("all");
     setIsOpenFilter(undefined);
   };
 
@@ -75,14 +77,22 @@ export default function ClinicFinder() {
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-afya-primary mb-4">
-            Find Healthcare Near You
-          </h1>
-          <p className="text-xl text-afya-secondary max-w-3xl mx-auto">
-            Discover nearby clinics and hospitals with real-time availability, reviews, and contact information.
-          </p>
+        {/* Header with Back Button */}
+        <div className="mb-8">
+          <Link href="/">
+            <Button variant="ghost" className="mb-4 text-afya-primary">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-afya-primary mb-4">
+              Find Healthcare Near You
+            </h1>
+            <p className="text-xl text-afya-secondary max-w-3xl mx-auto">
+              Discover nearby clinics and hospitals with real-time availability, reviews, and contact information.
+            </p>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -117,7 +127,7 @@ export default function ClinicFinder() {
                       <SelectValue placeholder="All Specialties" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Specialties</SelectItem>
+                      <SelectItem value="all">All Specialties</SelectItem>
                       {specialties.map((specialty) => (
                         <SelectItem key={specialty} value={specialty}>
                           {specialty}
@@ -137,7 +147,7 @@ export default function ClinicFinder() {
                       <SelectValue placeholder="Any availability" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Any availability</SelectItem>
+                      <SelectItem value="any">Any availability</SelectItem>
                       <SelectItem value="true">Open now</SelectItem>
                       <SelectItem value="false">Closed</SelectItem>
                     </SelectContent>
@@ -162,8 +172,8 @@ export default function ClinicFinder() {
             <Card className="afya-card mb-6">
               <CardContent className="p-6">
                 {/* Map Placeholder */}
-                <div className="h-64 bg-gradient-to-br from-blue-100 to-green-100 rounded-lg relative overflow-hidden mb-6">
-                  <div className="absolute inset-0 bg-blue-900 bg-opacity-20"></div>
+                <div className="h-64 bg-gradient-to-br from-blue-50 to-green-50 border-2 border-blue-200 rounded-lg relative overflow-hidden mb-6 shadow-inner">
+                  <div className="absolute inset-0 bg-blue-500 bg-opacity-10"></div>
                   
                   {/* Sample map pins based on search results */}
                   {clinics && clinics.length > 0 && (

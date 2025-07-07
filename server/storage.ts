@@ -65,11 +65,11 @@ export interface IStorage {
   getClinicReviews(clinicId: number): Promise<(ClinicReview & { user: Pick<User, 'username'> })[]>;
   createClinicReview(review: InsertClinicReview & { userId: number }): Promise<ClinicReview>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
@@ -108,7 +108,7 @@ export class DatabaseStorage implements IStorage {
     specialty?: string;
     isOpen?: boolean;
   }): Promise<Clinic[]> {
-    let query = db.select().from(clinics);
+    let query = db.select().from(clinics) as any;
     
     if (filters) {
       const conditions = [];
@@ -157,7 +157,7 @@ export class DatabaseStorage implements IStorage {
 
   // Blog methods
   async getBlogPosts(published?: boolean): Promise<BlogPost[]> {
-    let query = db.select().from(blogPosts);
+    let query = db.select().from(blogPosts) as any;
     
     if (published !== undefined) {
       query = query.where(eq(blogPosts.published, published));
@@ -187,7 +187,7 @@ export class DatabaseStorage implements IStorage {
 
   // Testimonial methods
   async getTestimonials(featured?: boolean): Promise<Testimonial[]> {
-    let query = db.select().from(testimonials);
+    let query = db.select().from(testimonials) as any;
     
     if (featured !== undefined) {
       query = query.where(eq(testimonials.featured, featured));

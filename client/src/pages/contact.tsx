@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import {
   Mail, 
   Clock, 
   Send,
+  ArrowLeft,
   Heart,
   MessageSquare,
   Users,
@@ -120,6 +122,15 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Link href="/">
+          <Button variant="ghost" className="mb-4 text-afya-primary">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
+      </div>
       
       <main>
         {/* Hero Section */}

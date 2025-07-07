@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Redirect } from "wouter";
+import { Redirect, Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -146,13 +146,25 @@ export default function AuthPage() {
                           </p>
                         )}
                       </div>
-                      <Button 
-                        type="submit" 
-                        className="w-full afya-btn-primary"
-                        disabled={loginMutation.isPending}
-                      >
-                        {loginMutation.isPending ? "Signing in..." : "Sign In"}
-                      </Button>
+                      <div className="flex flex-col space-y-3">
+                        <Button 
+                          type="submit" 
+                          className="w-full afya-btn-primary"
+                          disabled={loginMutation.isPending}
+                        >
+                          {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                        </Button>
+                        <div className="text-center">
+                          <Link href="/password-reset">
+                            <button 
+                              type="button"
+                              className="text-sm text-primary hover:text-primary/80 transition-colors"
+                            >
+                              Forgot your password?
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
                     </form>
                   </TabsContent>
                   

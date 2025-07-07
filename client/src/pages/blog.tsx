@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Clock, Search, BookOpen, Calendar, User } from "lucide-react";
+import { Clock, Search, BookOpen, Calendar, User, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
 
@@ -34,7 +35,7 @@ export default function Blog() {
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = selectedCategory === "" || post.category === selectedCategory;
+    const matchesCategory = selectedCategory === "" || selectedCategory === "all" || post.category === selectedCategory;
     
     return matchesSearch && matchesCategory;
   }) || [];
@@ -44,14 +45,22 @@ export default function Blog() {
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-afya-primary mb-4">
-            Health Education & Insights
-          </h1>
-          <p className="text-xl text-afya-secondary max-w-3xl mx-auto">
-            Stay informed with expert articles, health tips, and wellness guidance from medical professionals.
-          </p>
+        {/* Header with Back Button */}
+        <div className="mb-8">
+          <Link href="/">
+            <Button variant="ghost" className="mb-4 text-afya-primary">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-afya-primary mb-4">
+              Health Education & Insights
+            </h1>
+            <p className="text-xl text-afya-secondary max-w-3xl mx-auto">
+              Stay informed with expert articles, health tips, and wellness guidance from medical professionals.
+            </p>
+          </div>
         </div>
 
         {/* Search and Filter */}
@@ -71,7 +80,7 @@ export default function Blog() {
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}

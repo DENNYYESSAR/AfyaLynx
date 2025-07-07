@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import HomePage from "@/pages/home-page";
 import AuthPage from "@/pages/auth-page";
+import PasswordResetPage from "@/pages/password-reset";
 import Dashboard from "@/pages/dashboard";
 import ClinicFinder from "@/pages/clinic-finder";
 import Blog from "@/pages/blog";
@@ -19,6 +20,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/password-reset" component={PasswordResetPage} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
       <Route path="/clinics" component={ClinicFinder} />
       <Route path="/blog" component={Blog} />
